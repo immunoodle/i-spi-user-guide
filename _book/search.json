@@ -1,0 +1,82 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "I-SPI: An Applied User Guide",
+    "section": "",
+    "text": "Welcome\n\n\nWelcome to the companion to the Interactive Serology Plate Inspector (I-SPI) which is part of the Immunoplex software suite. This site provides documentation and practical guidance for uploading data and performing quality control of multiplex immunoassays.",
+    "crumbs": [
+      "Welcome"
+    ]
+  },
+  {
+    "objectID": "intro.html",
+    "href": "intro.html",
+    "title": "1  Data Uploading",
+    "section": "",
+    "text": "1.1 Anatomy of Raw Assay Data\nRaw assay data from multiplex bead assays consists of two primary components:\nThe system accepts Excel files (.xlsx, .xls) exported from Bio-Plex or similar instruments.\nEach file contains two sections.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Data Uploading</span>"
+    ]
+  },
+  {
+    "objectID": "summary.html",
+    "href": "summary.html",
+    "title": "2  Summary",
+    "section": "",
+    "text": "In summary, this book has no content whatsoever.\n\n1 + 1\n\n[1] 2",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Summary</span>"
+    ]
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "Wickham, Hadley. 2014. “Tidy Data.” Journal of\nStatistical Software 59 (10): 1–23. https://doi.org/10.18637/jss.v059.i10.",
+    "crumbs": [
+      "References"
+    ]
+  },
+  {
+    "objectID": "intro.html#anatomy-of-raw-assay-data",
+    "href": "intro.html#anatomy-of-raw-assay-data",
+    "title": "1  Data Uploading",
+    "section": "",
+    "text": "Plate metadata\n\nRaw assay MFI measurements and bead count values for antigens by specimen type on the plate\n\n\n\n\n1.1.1 Header Section (Rows 1–7)\n\nFile Name (full path)\n\nAcquisition Date (DD-MMM-YYYY, HH:MM AM/PM, see Section 1.3.3 for more details on supported formats)\n\nReader Serial Number\n\nRP1 PMT (Volts)\n\nRP1 Target\n\nPlate ID\n\nAdditional header information is not currently processed in I-SPI.\n\n\n\n1.1.2 Data Section (Row 8+)\n\n\n\n\n\n\n\nColumn\nDescription\n\n\n\n\nWell\nWell position (e.g., A1, B2, H12)\n\n\nType\nSpecimen type code\n\n\nDescription\nDelimited string containing sample metadata\n\n\nAntigen columns\nMFI values with bead counts in format value (count)\n\n\n% Agg Beads\nPercentage of aggregated beads\n\n\nSampling Errors\nError count during acquisition\n\n\n\n\n\n\n1.1.3 Specimen Type Codes\n\n\n\nCode\nMeaning\nDescription Format\n\n\n\n\nX\nSample\nPatientID_GroupA_GroupB_TimePeriod_DilutionFactor\n\n\nS\nStandard\nSource DilutionFactor (e.g. NIBSC06140 40)\n\n\nB\nBlank\nSource_DilutionFactor (e.g. PBS_1)\n\n\nC\nControl\nSource_DilutionFactor (e.g. Multigam_12500)\n\n\n\n\n\n\n\n\n\n\nFigure 1.1: An example of a raw file from a multiplex bead assay including the plate metadata bolded in the first 6 rows and the beginning of the raw assay measurements with a header beginning on row 8. The first 3 columns of the main dataset are Well, Type, and Description. The next columns are antigen measurements with bead regions identifying each antigen. The final columns are % Agg Beads and Sampling Errors.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Data Uploading</span>"
+    ]
+  },
+  {
+    "objectID": "intro.html#batch-upload-workflow",
+    "href": "intro.html#batch-upload-workflow",
+    "title": "1  Data Uploading",
+    "section": "1.2 Batch Upload Workflow",
+    "text": "1.2 Batch Upload Workflow\n\n1.2.1 Before Uploading Plate Files\nBefore uploading batch plate files ensure you have:\n\nCreated or loaded a Project - Navigate to “Create, Add, and Load Projects” in the sidebar\nCreated or selected a Study - Type a new study name (up to 15 characters) or select an existing one.\nSelected the sidebar option to Import Plate Data.\nCreated or selected an Experiment - Each experiment represents a specific assay run or feature (e.g., IgG_total, FcgR2a)\nSelected Layout Template as the file format.\n\n\n\n\n1.2.2 Upload Experiment Files\n\nClick Select all experiment raw data files\nSelect all plate files (.xlsx) for the batch\nEnter a Feature name (up to 15 characters) - this identifies the assay type (e.g., IgGtot,FcgR2a)\n\n\n\n\n1.2.3 Configure Plate Settings\n\nNumber of Wells\n\nSelect the plate format (6, 12, 24, 48, 96, 384, or 1536 wells)\n\nDescription Delimiter\n\nIf the Description field contains multiple elements, select the delimiter used:\n\n_ underscore (most common)\n| pipe\n: colon\n- hyphen\n\n\n1.2.3.1 Optional Elements\nCheck/uncheck to to include subject group assignments:\n\nSampleGroupA\nSampleGroupB\n\n\n\n1.2.3.2 Element Order\nDrag and drop elements to match the structure of the Description field structure\nDefault order: PatientID → TimePeriod → DilutionFactor With groups: PatientID → SampleGroupA → SampleGroupB → TimePeriod → DilutionFactor\n\n\n\n1.2.4 Generate Layout Template\n\nClick “Generate a Layout file”\nSave the Excel file to your computer\nThe template contains pre-populated sheets based on your plate data\n\n\n\n1.2.5 Review and Edit Layout Template\nOpen the generated Excel file and verify/edit each sheet:\n\n\n1.2.5.1 Sheet: plate_id\n\n\n\nColumn\nDescription\n\n\n\n\nstudy_name\nStudy identifier\n\n\nexperiment_name\nExperiment identifier\n\n\nnumber_of_wells\nPlate format\n\n\nplate_number\nInternal plate identifier\n\n\nplateid\nPlate ID from instrument\n\n\nplate_filename\nOriginal file path\n\n\n\n\n\n\n1.2.5.2 Sheet: subject_groups\n\n\n\nColumn\nDescription\n\n\n\n\nstudy_name\nStudy identifier\n\n\nsubject_id\nUnique subject identifier\n\n\ngroupa\nFirst categorical grouping\n\n\ngroupb\nSecond categorical grouping\n\n\n\n\n\n\n1.2.5.3 Sheet: timepoint\n\n\n\nColumn\nDescription\n\n\n\n\nstudy_name\nStudy identifier\n\n\ntimepoint_tissue_abbreviation\nShort timepoint code\n\n\ntissue_type\nExample: blood\n\n\ntissue_subtype\nExample: serum\n\n\ndescription\nFull timepoint description\n\n\nmin_time_since_day_0\nMinimum days from baseline\n\n\nmax_time_since_day_0\nMaximum days from baseline\n\n\n\n\n\n\n1.2.5.4 Sheet: antigen_list\n\n\n\nColumn\nDescription\n\n\n\n\nantigen_label_on_plate\nColumn name from plate file\n\n\nantigen_abbreviation\nShort antigen name\n\n\nantigen_family\nAntigen grouping\n\n\nstandard_curve_max_concentration\nUpper limit for curve fitting\n\n\n\n\n\n\n1.2.5.5 Sheet: plates_map\n\n\n\nColumn\nDescription\n\n\n\n\nstudy_name\nStudy identifier\n\n\nplate_number\nPlate identifier\n\n\nwell\nWell position\n\n\nspecimen_type\nX, S, B, C\n\n\nspecimen_source\nSource material\n\n\nspecimen_dilution_factor\nDilution value\n\n\nsubject_id\nSubject reference\n\n\nbiosample_id_barcode\nSample barcode\n\n\ntimepoint_tissue_abbreviation\nTimepoint reference\n\n\n\n\n\n\n\n1.2.6 Upload Completed Layout\n\nClick “Upload a completed layout file”\nSelect your edited layout template\nReview the plate layout visualization\nConfigure Blank and Empty Well Handling:\n\n\nSkip Empty Wells - removes blank entries\nUse as Blank - treats as background controls\n\n\n\n1.2.7 Validate and Upload\n\nCheck the Batch Validated badge appears (green checkmark)\nIf validation fails, review error messages and correct issues\nClick “Upload Batch” to store data in database\nVerify Batch Uploaded badge appears",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Data Uploading</span>"
+    ]
+  },
+  {
+    "objectID": "intro.html#generate-layout-template",
+    "href": "intro.html#generate-layout-template",
+    "title": "1  Data Uploading",
+    "section": "1.3 Generate Layout Template",
+    "text": "1.3 Generate Layout Template",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Data Uploading</span>"
+    ]
+  },
+  {
+    "objectID": "intro.html#validation-and-error-handling",
+    "href": "intro.html#validation-and-error-handling",
+    "title": "1  Data Uploading",
+    "section": "1.3 Validation and Error Handling",
+    "text": "1.3 Validation and Error Handling\nI-SPI performs the following validation before allowing upload:\n\n1.3.1 Metadata Validation\n\nAll uploaded files listed in the plate_id sheet\nFile paths are valid\nRP1 PMT values are numeric\nRP1 Target values are numeric\nAcquisition date matches format DD-MMM-YYYY, HH:MM AM/PM\n\n\n\n1.3.2 Bead Array Data Validation\n\nAll antigens in layout exist in plate data\n% Agg Beads column present\nBead counts in the format: value (count)\nBlank descriptions follow the format: Source_Dilution\n\n\n\n1.3.3 Date Normalization\nI-SPI normalizes the Aquisition Date during data upload. It handles the following formats:\n\nUS formats: M/D/YYYY H:MM AM/PM\nEuropean formats: DD/MM/YYYY HH:MM, DD.MM.YYYY HH:MM\nISO: YYYY-MM-DD HH:MM:SS\n\nIn addition, I-SPI supports non-English month abbreviations including:\n\nDutch (okt, mrt, mei)\nGerman (Mär, Mai, Dez)\nFrench (fév, avr, aoû)\nSpanish (ene, abr, dic)\nItalian (gen, mag, giu, lug)\nPortuguese (fev, out)\n\nValid years currently include the years 1990–2100.\n\n\n1.3.4 Common Validation Errors\n\n\n\n\n\n\n\n\nError\nCause\nSolution\n\n\n\n\nANTIGEN MISMATCH\nLayout antigens do not match plate columns\nVerify antigen names exactly match column headers\n\n\nLAYOUT MISMATCH\nUploaded files not listed in plate_id\nAdd missing files to plate_id sheet\n\n\nINVALID ACQUISITION DATE\nIncorrect date format\nUse Format: 01-Oct-2025, 12:12 PM\n\n\nBEAD COUNT FORMAT ERROR\nMissing bead counts\nEnsure format: value (count)\n\n\n\n\n\n\n\n\nWickham, Hadley. 2014. “Tidy Data.” Journal of Statistical Software 59 (10): 1–23. https://doi.org/10.18637/jss.v059.i10.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Data Uploading</span>"
+    ]
+  }
+]

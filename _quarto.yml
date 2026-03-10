@@ -1,0 +1,28 @@
+project:
+  type: book
+  output-dir: docs
+
+
+book:
+  title: "I-SPI: An Applied User Guide"
+  author: "Seamus Stein, Hardik Gupta, Scot Zens, Annie Hoen"
+  date: today
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - study_settings.qmd
+    - standard_curves.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
+  epub:
+    cover-image: cover.png
+
+editor: visual
+

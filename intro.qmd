@@ -1,0 +1,260 @@
+
+# Data Uploading
+
+The Interactive Serology Plate Inspector (I-SPI) is designed to streamline quality control and quality assurance for multiplex bead assays starting from raw assay data. Raw bead array data, including assays from Luminex instruments, require careful preparation so that the data can be processed uniformly.
+
+The purpose of this section is to provide guidance to ensure data is loaded correctly and to reveal any inconsistencies in plate labeling and study design.
+
+The Interactive Serology Plate Inspector allows users to import multiple plate files from multiplex immunoassays and uses interactive methods to parse uploaded datasets into tidy data [@wickham2014tidy] with consistent linkages to independent variables including:
+
+- Categories across groups of subjects  
+- Timepoint and tissue classification within subjects  
+- Multiple sample dilutions  
+
+---
+
+## Anatomy of Raw Assay Data
+
+Raw assay data from multiplex bead assays consists of two primary components:
+
+1. Plate metadata  
+2. Raw assay MFI measurements and bead count values for antigens by specimen type on the plate  
+
+The system accepts Excel files (`.xlsx`, `.xls`) exported from Bio-Plex or similar instruments.
+
+Each file contains two sections.
+
+### Header Section (Rows 1–7)
+
+- File Name (full path)  
+- Acquisition Date (`DD-MMM-YYYY, HH:MM AM/PM`, see @sec-date-normalization for more details on supported formats)  
+- Reader Serial Number  
+- RP1 PMT (Volts)  
+- RP1 Target  
+- Plate ID  
+
+Additional header information is not currently processed in I-SPI.
+
+---
+
+### Data Section (Row 8+)
+
+| Column | Description |
+|------|-------------|
+| Well | Well position (e.g., A1, B2, H12) |
+| Type | Specimen type code |
+| Description | Delimited string containing sample metadata |
+| Antigen columns | MFI values with bead counts in format `value (count)` |
+| % Agg Beads | Percentage of aggregated beads |
+| Sampling Errors | Error count during acquisition |
+
+---
+
+### Specimen Type Codes
+
+| Code | Meaning | Description Format |
+|----|----|----|
+| X | Sample | `PatientID_GroupA_GroupB_TimePeriod_DilutionFactor` |
+| S | Standard | `Source DilutionFactor` (e.g. `NIBSC06140 40`) |
+| B | Blank | `Source_DilutionFactor` (e.g. `PBS_1`) |
+| C | Control | `Source_DilutionFactor` (e.g. `Multigam_12500`) |
+
+---
+
+![An example of a raw file from a multiplex bead assay including the plate metadata bolded in the first 6 rows and the beginning of the raw assay measurements with a header beginning on row 8. The first 3 columns of the main dataset are Well, Type, and Description. The next columns are antigen measurements with bead regions identifying each antigen. The final columns are % Agg Beads and Sampling Errors.](images/raw_plate.png){#fig-raw-plate}
+
+
+## Batch Upload Workflow
+
+### Before Uploading Plate Files
+
+Before uploading batch plate files ensure you have:
+
+1. *Created or loaded a Project* - Navigate to "Create, Add, and Load Projects" in the sidebar
+2. *Created or selected a Study* - Type a new study name (up to 15 characters) or select an existing
+one.
+3. *Selected the sidebar option to Import Plate Data*.
+4. *Created or selected an Experiment* - Each experiment represents a specific assay run or feature
+(e.g., `IgG_total`, `FcgR2a`)
+5. *Selected Layout Template as the file format.*
+
+---
+
+### Upload Experiment Files
+
+1. Click *Select all experiment raw data files*
+2. *Select all plate files* (`.xlsx`) for the batch
+3. *Enter a Feature name* (up to 15 characters) - this identifies the assay type (e.g., `IgGtot`,`FcgR2a`)
+
+---
+
+### Configure Plate Settings
+
+1.  Number of Wells
+
+Select the plate format (6, 12, 24, 48, 96, 384, or 1536 wells)
+
+2. Description Delimiter
+
+If the Description field contains multiple elements, select the delimiter used:
+
+- `_` underscore (most common)
+- `|` pipe
+- `:` colon
+- `-` hyphen
+
+#### Optional Elements
+
+Check/uncheck to to include subject group assignments:
+
+- SampleGroupA
+- SampleGroupB
+
+#### Element Order
+
+Drag and drop elements to match the structure of the Description field structure
+
+Default order: PatientID → TimePeriod → DilutionFactor
+With groups: PatientID → SampleGroupA → SampleGroupB → TimePeriod → DilutionFactor
+
+### Generate Layout Template
+
+1. *Click* "Generate a Layout file"
+2. *Save the Excel file* to your computer
+3. The template contains pre-populated sheets based on your plate data
+
+### Review and Edit Layout Template
+
+Open the generated Excel file and verify/edit each sheet:
+
+---
+
+#### Sheet: `plate_id`
+
+| Column | Description |
+|------|-------------|
+| study_name | Study identifier |
+| experiment_name | Experiment identifier |
+| number_of_wells | Plate format |
+| plate_number | Internal plate identifier |
+| plateid | Plate ID from instrument |
+| plate_filename | Original file path |
+
+---
+
+#### Sheet: `subject_groups`
+
+| Column | Description |
+|------|-------------|
+| study_name | Study identifier |
+| subject_id | Unique subject identifier |
+| groupa | First categorical grouping |
+| groupb | Second categorical grouping |
+
+---
+
+#### Sheet: `timepoint`
+
+| Column | Description |
+|------|-------------|
+| study_name | Study identifier |
+| timepoint_tissue_abbreviation | Short timepoint code |
+| tissue_type | Example: blood |
+| tissue_subtype | Example: serum |
+| description | Full timepoint description |
+| min_time_since_day_0 | Minimum days from baseline |
+| max_time_since_day_0 | Maximum days from baseline |
+
+---
+
+#### Sheet: `antigen_list`
+
+| Column | Description |
+|------|-------------|
+| antigen_label_on_plate | Column name from plate file |
+| antigen_abbreviation | Short antigen name |
+| antigen_family | Antigen grouping |
+| standard_curve_max_concentration | Upper limit for curve fitting |
+
+---
+
+#### Sheet: `plates_map`
+
+| Column | Description |
+|------|-------------|
+| study_name | Study identifier |
+| plate_number | Plate identifier |
+| well | Well position |
+| specimen_type | X, S, B, C |
+| specimen_source | Source material |
+| specimen_dilution_factor | Dilution value |
+| subject_id | Subject reference |
+| biosample_id_barcode | Sample barcode |
+| timepoint_tissue_abbreviation | Timepoint reference |
+
+---
+
+###  Upload Completed Layout
+
+1. *Click* "Upload a completed layout file"
+2. *Select* your edited layout template
+3. Review the plate layout visualization
+4. Configure Blank and Empty Well Handling:
+- `Skip Empty Wells` - removes blank entries
+- `Use as Blank` - treats as background controls
+
+### Validate and Upload
+1. Check the Batch Validated badge appears (green checkmark)
+2. If validation fails, review error messages and correct issues
+3. *Click* "Upload Batch" to store data in database
+4. Verify Batch Uploaded badge appears
+
+## Validation and Error Handling
+
+I-SPI performs the following validation before allowing upload:
+
+### Metadata Validation
+
+- All uploaded files listed in the `plate_id` sheet
+- File paths are valid
+- RP1 PMT values are numeric
+- RP1 Target values are numeric
+- Acquisition date matches format `DD-MMM-YYYY, HH:MM AM/PM`
+
+
+### Bead Array Data Validation
+
+- All antigens in layout exist in plate data
+- `% Agg Beads` column present
+- Bead counts in the format: `value (count)`
+- Blank descriptions follow the format: `Source_Dilution`
+
+### Date Normalization {#sec-date-normalization}
+
+I-SPI normalizes the `Aquisition Date` during data upload. It handles the following formats:
+
+- US formats: M/D/YYYY H:MM AM/PM
+- European formats: DD/MM/YYYY HH:MM, DD.MM.YYYY HH:MM
+- ISO: YYYY-MM-DD HH:MM:SS
+
+In addition, I-SPI supports non-English month abbreviations including:
+
+- Dutch (okt, mrt, mei)
+- German (Mär, Mai, Dez)
+- French (fév, avr, aoû) 
+- Spanish (ene, abr, dic)
+- Italian (gen, mag, giu, lug) 
+- Portuguese (fev, out)
+
+Valid years currently include the years 1990–2100. 
+
+### Common Validation Errors
+
+| Error | Cause | Solution |
+|------|------|------|
+| ANTIGEN MISMATCH | Layout antigens do not match plate columns | Verify antigen names exactly match column headers |
+| LAYOUT MISMATCH | Uploaded files not listed in `plate_id` | Add missing files to `plate_id` sheet |
+| INVALID ACQUISITION DATE | Incorrect date format | Use Format: `01-Oct-2025, 12:12 PM` |
+| BEAD COUNT FORMAT ERROR | Missing bead counts | Ensure format: `value (count)`|
+
+---
